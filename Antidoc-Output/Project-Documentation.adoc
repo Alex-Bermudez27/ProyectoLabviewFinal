@@ -1,0 +1,832 @@
+= Proyecto Final Instrumentacion Virtual
+Alejandro Bermudez Cardenas <abc65717@udelasalle.edu.mx>
+:doctype: book
+:toc: 
+:imagesdir: Images
+:sectnums: 
+:toclevels: 3
+:chapter-label: Section
+
+== Project description
+
+No description found (add content in project description)
+
+== Code component descriptions
+
+=== DQMH(R) modules
+
+This section describes DQMH(R) module responsibilities and relationships.
+
+==== Preamble
+
+A DQMH module is the main component of an architecture based on DQMH(R) framework. A DQMH module is used to implement a section of the application that has one responsibility.
+
+DQMH(R) framework defines two different type of DQMH module.  
+
+====
+*Singleton:*
+
+A Singleton DQMH module can have only one instance running at any given time.
+====
+
+====
+*Cloneable:*
+
+A Cloneable DQMH module can have one or multiple instances running in parallel.
+====
+
+DQMH(R) framework defines two different ways to carry data throughout the application and with both other DQMH modules and non-DQMH based code.
+
+====
+*Request events:*
+
+A request is a code that fires an event requesting the DQMH module to do something. Multiple locations in the code can send events to the DQMH module.
+
+Request events are many-to-one.
+
+Requests are usually named using imperative tense.
+====
+
+====
+*Broadcast events:*
+
+A broadcast is a code that fires an event broadcasting that the DQMH module did something. Multiple Event Structures can register to handle the Broadcast Events.
+
+Broadcast Events are one-to-many.
+
+Broadcasts are usually named using past tense or passive voice.
+====
+
+NOTE: Refer to the DQMH(R) framework official http://delacor.com/documentation/dqmh-html/[documentation] to find more details on how the framework works
+
+
+The following section gives you details on the project architecture relying on this framework.
+It gives you an overview of the modules' interaction and detailed information on each module.
+
+Graphs used in this section have the following legend:
+
+*Components:*
+
+
+[graphviz, format="png", align="center"]
+....
+digraph G562330 {
+rankdir=LR;
+edge[dir=both color=black  arrowhead=normal arrowtail=none style=filled penwidth=1]
+node[color=black shape=box]
+"DQMH module / Lvlib"[color=black shape=component]
+"Vi"[color=skyblue shape=note]
+}
+....
+
+*Events:*
+
+[graphviz, format="png", align="center"]
+....
+digraph G325362 {
+rankdir=LR;
+edge[dir=both color=black  arrowhead=normal arrowtail=none style=filled penwidth=1]
+node[color=black shape=box]
+" "[color=white shape=box]
+"  "[color=white shape=box]
+"   "[color=white shape=box]
+"    "[color=white shape=box]
+" " -> "  " [label="Request to a DQMH module" dir=both color=forestgreen  arrowhead=normal arrowtail=none style=filled penwidth=1];
+"   " -> "    " [label="Broadcast from a DQMH module" dir=both color=goldenrod  arrowhead=normal arrowtail=none style=dashed penwidth=1];
+}
+....
+
+*Start and Stop module callers:*
+
+[graphviz, format="png", align="center"]
+....
+digraph G327285 {
+rankdir=LR;
+edge[dir=both color=black  arrowhead=normal arrowtail=none style=filled penwidth=1]
+node[color=black shape=box]
+"Start Module
+caller"[color=black shape=component]
+"Start Module"[color=yellowgreen shape=note]
+"Start Module" -> "Start Module
+caller" [label="Called by" dir=both color=yellowgreen  arrowhead=odot arrowtail=inv style=filled penwidth=1];
+}
+....
+
+[graphviz, format="png", align="center"]
+....
+digraph G451660 {
+rankdir=LR;
+edge[dir=both color=black  arrowhead=normal arrowtail=none style=filled penwidth=1]
+node[color=black shape=box]
+"Stop Module
+caller"[color=black shape=component]
+"Stop Module"[color=tomato shape=note]
+"Stop Module" -> "Stop Module
+caller" [label="Called by" dir=both color=tomato  arrowhead=odot arrowtail=inv style=dotted penwidth=1];
+}
+....
+
+
+==== Modules overview
+
+This project contains the following modules.
+
+.Modules list
+|===
+|Singleton|Cloneable
+
+|===
+
+This graph represents the links between all DQMH modules.
+
+[graphviz, format="png", align="center"]
+....
+digraph G3310020 {
+rankdir=LR;
+edge[dir=both color=black  arrowhead=normal arrowtail=none style=filled penwidth=1]
+node[color=black shape=box]
+}
+....
+
+
+=== Libraries
+
+This section describes the libraries contained in the project.
+
+==== UI.lvlib
+
+Actor Framework con el que se trabajo el proyecto, realziado desde el template de actor framework
+
+
+=== Classes
+
+This section describes the classes contained in the project.
+
+==== Serial Device.lvclass
+
+Clase Padre unicamente para dar formato de HAL
+
+
+==== Cypress.lvclass
+
+Clase Hija del micro Cypress 
+
+
+==== NXP.lvclass
+
+Clase Hija del micro NXP
+
+
+==== Simulada.lvclass
+
+Clase hija para el simulado
+
+
+==== Tester.lvclass
+
+Clase para el UNIT TEST
+
+
+==== Init Msg.lvclass
+
+No description found (add content in lvlib description)
+
+
+==== UI.lvclass
+
+Clase del Actor para la UI, donde se estaran los controles e indicadores para los comandos de los micros
+
+
+== VI descriptions
+
+=== DQMH(R) modules
+
+This section describes DQMH(R) modules events.
+
+=== Libraries
+
+This section describes libraries public VIs.
+
+==== UI.lvlib
+
+===== UI.lvlib:Init Msg.lvclass:Send Init.vi
+
+:imgpath: UI.lvlib_Init Msg.lvclass_Send Init.vi.png
+image::{imgpath}[UI.lvlib:Init Msg.lvclass:Send Init.vi]
+
+*Description:*
+++++
+This VI sends the message to an actor.
+++++
+
+===== UI.lvlib:Init Msg.lvclass:Do.vi
+
+:imgpath: UI.lvlib_Init Msg.lvclass_Do.vi.png
+image::{imgpath}[UI.lvlib:Init Msg.lvclass:Do.vi]
+
+*Description:*
+++++
+This VI delivers the message to the actor by calling the appropriate method(s) on the actor.
+++++
+
+===== UI.lvlib:UI.lvclass:Read Device.vi
+
+:imgpath: UI.lvlib_UI.lvclass_Read Device.vi.png
+image::{imgpath}[UI.lvlib:UI.lvclass:Read Device.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== UI.lvlib:UI.lvclass:Write Device.vi
+
+:imgpath: UI.lvlib_UI.lvclass_Write Device.vi.png
+image::{imgpath}[UI.lvlib:UI.lvclass:Write Device.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== UI.lvlib:UI.lvclass:Read Serial Device.lvclass.vi
+
+:imgpath: UI.lvlib_UI.lvclass_Read Serial Device.lvclass.vi.png
+image::{imgpath}[UI.lvlib:UI.lvclass:Read Serial Device.lvclass.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== UI.lvlib:UI.lvclass:Write Serial Device.lvclass.vi
+
+:imgpath: UI.lvlib_UI.lvclass_Write Serial Device.lvclass.vi.png
+image::{imgpath}[UI.lvlib:UI.lvclass:Write Serial Device.lvclass.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== UI.lvlib:UI.lvclass:Read VISA resource name.vi
+
+:imgpath: UI.lvlib_UI.lvclass_Read VISA resource name.vi.png
+image::{imgpath}[UI.lvlib:UI.lvclass:Read VISA resource name.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== UI.lvlib:UI.lvclass:Write VISA resource name.vi
+
+:imgpath: UI.lvlib_UI.lvclass_Write VISA resource name.vi.png
+image::{imgpath}[UI.lvlib:UI.lvclass:Write VISA resource name.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== UI.lvlib:UI.lvclass:Init.vi
+
+:imgpath: UI.lvlib_UI.lvclass_Init.vi.png
+image::{imgpath}[UI.lvlib:UI.lvclass:Init.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== UI.lvlib:UI.lvclass:VISA read.vi
+
+:imgpath: UI.lvlib_UI.lvclass_VISA read.vi.png
+image::{imgpath}[UI.lvlib:UI.lvclass:VISA read.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+=== Classes
+
+This section describes classes public VIs.
+
+==== Serial Device.lvclass
+
+===== Serial Device.lvclass:FGV.vi
+
+:imgpath: Serial Device.lvclass_FGV.vi.png
+image::{imgpath}[Serial Device.lvclass:FGV.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Serial Device.lvclass:Init.vi
+
+:imgpath: Serial Device.lvclass_Init.vi.png
+image::{imgpath}[Serial Device.lvclass:Init.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Serial Device.lvclass:Read Pin.vi
+
+:imgpath: Serial Device.lvclass_Read Pin.vi.png
+image::{imgpath}[Serial Device.lvclass:Read Pin.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Serial Device.lvclass:Read Port.vi
+
+:imgpath: Serial Device.lvclass_Read Port.vi.png
+image::{imgpath}[Serial Device.lvclass:Read Port.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Serial Device.lvclass:Send ADC.vi
+
+:imgpath: Serial Device.lvclass_Send ADC.vi.png
+image::{imgpath}[Serial Device.lvclass:Send ADC.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Serial Device.lvclass:Write Pin.vi
+
+:imgpath: Serial Device.lvclass_Write Pin.vi.png
+image::{imgpath}[Serial Device.lvclass:Write Pin.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Serial Device.lvclass:Write Port.vi
+
+:imgpath: Serial Device.lvclass_Write Port.vi.png
+image::{imgpath}[Serial Device.lvclass:Write Port.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+==== Cypress.lvclass
+
+===== Cypress.lvclass:Dec to Hex.vi
+
+:imgpath: Cypress.lvclass_Dec to Hex.vi.png
+image::{imgpath}[Cypress.lvclass:Dec to Hex.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Cypress.lvclass:Hex to Dec.vi
+
+:imgpath: Cypress.lvclass_Hex to Dec.vi.png
+image::{imgpath}[Cypress.lvclass:Hex to Dec.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Cypress.lvclass:Init.vi
+
+:imgpath: Cypress.lvclass_Init.vi.png
+image::{imgpath}[Cypress.lvclass:Init.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Cypress.lvclass:Read Pin.vi
+
+:imgpath: Cypress.lvclass_Read Pin.vi.png
+image::{imgpath}[Cypress.lvclass:Read Pin.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Cypress.lvclass:Read Port.vi
+
+:imgpath: Cypress.lvclass_Read Port.vi.png
+image::{imgpath}[Cypress.lvclass:Read Port.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Cypress.lvclass:Send ADC.vi
+
+:imgpath: Cypress.lvclass_Send ADC.vi.png
+image::{imgpath}[Cypress.lvclass:Send ADC.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Cypress.lvclass:Visa read.vi
+
+:imgpath: Cypress.lvclass_Visa read.vi.png
+image::{imgpath}[Cypress.lvclass:Visa read.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Cypress.lvclass:Write Pin.vi
+
+:imgpath: Cypress.lvclass_Write Pin.vi.png
+image::{imgpath}[Cypress.lvclass:Write Pin.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Cypress.lvclass:Write Port.vi
+
+:imgpath: Cypress.lvclass_Write Port.vi.png
+image::{imgpath}[Cypress.lvclass:Write Port.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+==== NXP.lvclass
+
+===== NXP.lvclass:Init.vi
+
+:imgpath: NXP.lvclass_Init.vi.png
+image::{imgpath}[NXP.lvclass:Init.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== NXP.lvclass:Read Pin.vi
+
+:imgpath: NXP.lvclass_Read Pin.vi.png
+image::{imgpath}[NXP.lvclass:Read Pin.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== NXP.lvclass:Read Port.vi
+
+:imgpath: NXP.lvclass_Read Port.vi.png
+image::{imgpath}[NXP.lvclass:Read Port.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== NXP.lvclass:Send ADC.vi
+
+:imgpath: NXP.lvclass_Send ADC.vi.png
+image::{imgpath}[NXP.lvclass:Send ADC.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== NXP.lvclass:Visa Read.vi
+
+:imgpath: NXP.lvclass_Visa Read.vi.png
+image::{imgpath}[NXP.lvclass:Visa Read.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== NXP.lvclass:Write Pin.vi
+
+:imgpath: NXP.lvclass_Write Pin.vi.png
+image::{imgpath}[NXP.lvclass:Write Pin.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== NXP.lvclass:Write Port.vi
+
+:imgpath: NXP.lvclass_Write Port.vi.png
+image::{imgpath}[NXP.lvclass:Write Port.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+==== Simulada.lvclass
+
+===== Simulada.lvclass:FGV.vi
+
+:imgpath: Simulada.lvclass_FGV.vi.png
+image::{imgpath}[Simulada.lvclass:FGV.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Simulada.lvclass:Init.vi
+
+:imgpath: Simulada.lvclass_Init.vi.png
+image::{imgpath}[Simulada.lvclass:Init.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Simulada.lvclass:Read Pin.vi
+
+:imgpath: Simulada.lvclass_Read Pin.vi.png
+image::{imgpath}[Simulada.lvclass:Read Pin.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Simulada.lvclass:Read Port.vi
+
+:imgpath: Simulada.lvclass_Read Port.vi.png
+image::{imgpath}[Simulada.lvclass:Read Port.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Simulada.lvclass:Send ADC.vi
+
+:imgpath: Simulada.lvclass_Send ADC.vi.png
+image::{imgpath}[Simulada.lvclass:Send ADC.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Simulada.lvclass:Write Pin.vi
+
+:imgpath: Simulada.lvclass_Write Pin.vi.png
+image::{imgpath}[Simulada.lvclass:Write Pin.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Simulada.lvclass:Write Port.vi
+
+:imgpath: Simulada.lvclass_Write Port.vi.png
+image::{imgpath}[Simulada.lvclass:Write Port.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+==== Tester.lvclass
+
+===== Tester.lvclass:setUp.vi
+
+:imgpath: Tester.lvclass_setUp.vi.png
+image::{imgpath}[Tester.lvclass:setUp.vi]
+
+*Description:*
+++++
+setUp runs prior to the test method during test execution.  Use this method to initialize any object data required by your tests.
+++++
+
+===== Tester.lvclass:tearDown.vi
+
+:imgpath: Tester.lvclass_tearDown.vi.png
+image::{imgpath}[Tester.lvclass:tearDown.vi]
+
+*Description:*
+++++
+tearDown runs after the test method has completed.  Use this method to clean up any operations or references that were opened by setUp or the test method.  Unit tests should be independent of other unit tests so this VI should ensure that the next test can run in a 'clean' test environment.
+++++
+
+===== Tester.lvclass:testExample.vit
+
+:imgpath: Tester.lvclass_testExample.vit.png
+image::{imgpath}[Tester.lvclass:testExample.vit]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Tester.lvclass:temp_VI_UnderTest.vi
+
+:imgpath: Tester.lvclass_temp_VI_UnderTest.vi.png
+image::{imgpath}[Tester.lvclass:temp_VI_UnderTest.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Tester.lvclass:test ADC.vi
+
+:imgpath: Tester.lvclass_test ADC.vi.png
+image::{imgpath}[Tester.lvclass:test ADC.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Tester.lvclass:test Write Port.vi
+
+:imgpath: Tester.lvclass_test Write Port.vi.png
+image::{imgpath}[Tester.lvclass:test Write Port.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Tester.lvclass:test Write Pin.vi
+
+:imgpath: Tester.lvclass_test Write Pin.vi.png
+image::{imgpath}[Tester.lvclass:test Write Pin.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Tester.lvclass:test Read Port.vi
+
+:imgpath: Tester.lvclass_test Read Port.vi.png
+image::{imgpath}[Tester.lvclass:test Read Port.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== Tester.lvclass:test Read Pin.vi
+
+:imgpath: Tester.lvclass_test Read Pin.vi.png
+image::{imgpath}[Tester.lvclass:test Read Pin.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+==== Init Msg.lvclass
+
+===== UI.lvlib:Init Msg.lvclass:Send Init.vi
+
+:imgpath: UI.lvlib_Init Msg.lvclass_Send Init.vi.png
+image::{imgpath}[UI.lvlib:Init Msg.lvclass:Send Init.vi]
+
+*Description:*
+++++
+This VI sends the message to an actor.
+++++
+
+===== UI.lvlib:Init Msg.lvclass:Do.vi
+
+:imgpath: UI.lvlib_Init Msg.lvclass_Do.vi.png
+image::{imgpath}[UI.lvlib:Init Msg.lvclass:Do.vi]
+
+*Description:*
+++++
+This VI delivers the message to the actor by calling the appropriate method(s) on the actor.
+++++
+
+==== UI.lvclass
+
+===== UI.lvlib:UI.lvclass:Read Device.vi
+
+:imgpath: UI.lvlib_UI.lvclass_Read Device.vi.png
+image::{imgpath}[UI.lvlib:UI.lvclass:Read Device.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== UI.lvlib:UI.lvclass:Write Device.vi
+
+:imgpath: UI.lvlib_UI.lvclass_Write Device.vi.png
+image::{imgpath}[UI.lvlib:UI.lvclass:Write Device.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== UI.lvlib:UI.lvclass:Read Serial Device.lvclass.vi
+
+:imgpath: UI.lvlib_UI.lvclass_Read Serial Device.lvclass.vi.png
+image::{imgpath}[UI.lvlib:UI.lvclass:Read Serial Device.lvclass.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== UI.lvlib:UI.lvclass:Write Serial Device.lvclass.vi
+
+:imgpath: UI.lvlib_UI.lvclass_Write Serial Device.lvclass.vi.png
+image::{imgpath}[UI.lvlib:UI.lvclass:Write Serial Device.lvclass.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== UI.lvlib:UI.lvclass:Read VISA resource name.vi
+
+:imgpath: UI.lvlib_UI.lvclass_Read VISA resource name.vi.png
+image::{imgpath}[UI.lvlib:UI.lvclass:Read VISA resource name.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== UI.lvlib:UI.lvclass:Write VISA resource name.vi
+
+:imgpath: UI.lvlib_UI.lvclass_Write VISA resource name.vi.png
+image::{imgpath}[UI.lvlib:UI.lvclass:Write VISA resource name.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== UI.lvlib:UI.lvclass:Init.vi
+
+:imgpath: UI.lvlib_UI.lvclass_Init.vi.png
+image::{imgpath}[UI.lvlib:UI.lvclass:Init.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+===== UI.lvlib:UI.lvclass:VISA read.vi
+
+:imgpath: UI.lvlib_UI.lvclass_VISA read.vi.png
+image::{imgpath}[UI.lvlib:UI.lvclass:VISA read.vi]
+
+*Description:*
+No description found (add content in VI description)
+
+== Legal Information
+
+=== Document creation
+
+This document has been generated using the following tools.
+
+==== Antidoc
+
+Project website: https://wovalab.gitlab.io/open-source/labview-doc-generator/[Antidoc] 
+
+Maintainer website: https://wovalab.com[Wovalab] 
+
+BSD 3-Clause License
+
+Copyright (C) 2019, Wovalab,
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of the copyright holder nor the names of its
+  contributors may be used to endorse or promote products derived from
+  this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+==== Asciidoc for LabVIEW(TM)
+
+Project website: https://wovalab.gitlab.io/open-source/asciidoc-toolkit/[Asciidoc toolkit] 
+
+Maintainer website: https://wovalab.com[Wovalab] 
+
+BSD 3-Clause License
+
+Copyright (C) 2019, Wovalab,
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of the copyright holder nor the names of its
+  contributors may be used to endorse or promote products derived from
+  this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+==== Graph Builder
+
+Project website: https://gitlab.com/cgambini/graph-builder[Graph Builder]
+
+BSD 3-Clause License
+
+Copyright (c) 2020, Cyril GAMBINI
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of the copyright holder nor the names of its
+  contributors may be used to endorse or promote products derived from
+  this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+=== Product used in the project
+
+Antidoc hasn't been able to detect third party products in the project.
+This is the author's responsibility to list any of the missing product used.
